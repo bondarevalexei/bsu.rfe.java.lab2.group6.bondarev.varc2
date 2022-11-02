@@ -6,16 +6,11 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 public class App extends JFrame {
   private static final int WIDTH = 400;
@@ -32,6 +27,9 @@ public class App extends JFrame {
   private ButtonGroup radioButtons = new ButtonGroup();
   // Контейнер для отображения радио-кнопок
   private Box hboxFormulaType = Box.createHorizontalBox();
+  private Box imageBox = Box.createHorizontalBox();
+
+  private JPanel image = new JPanel();
   private int formulaId = 1;
 
   // Формула №1 для рассчѐта
@@ -46,6 +44,19 @@ public class App extends JFrame {
             (Math.exp(z*z)+Math.sqrt(1/x)+Math.cos(Math.exp(y)));
   }
 
+  private void drawImage() throws IOException {
+    if(formulaId == 1){
+      BufferedImage formula = ImageIO.read(new File("img//f1.bmp"));
+      JLabel imageLabel = new JLabel(new ImageIcon(formula));
+      image.setLayout(new BorderLayout());
+      image.add("Center", imageLabel);
+    }
+    else{
+      JLabel imageLabel = new JLabel(new ImageIcon(ImageIO.read(new File("f2.bmp"))));
+      image.setLayout(new BorderLayout());
+      image.add("Center", imageLabel  );
+    }
+  }
   // Вспомогательный метод для добавления кнопок на панель
   private void addRadioButton(String buttonName, final int formulaId) {
     JRadioButton button = new JRadioButton(buttonName);
@@ -54,7 +65,7 @@ public class App extends JFrame {
 
         public void actionPerformed(ActionEvent ev) {
           App.this.formulaId = formulaId;
-          //imagePanel.updateUI();
+
         }
       }
     );
@@ -63,7 +74,7 @@ public class App extends JFrame {
   }
 
   // Конструктор класса
-  public App() {
+  public App() throws IOException {
     super("Вычисление формулы");
     setSize(WIDTH, HEIGHT);
     Toolkit kit = Toolkit.getDefaultToolkit();
@@ -72,7 +83,10 @@ public class App extends JFrame {
       (kit.getScreenSize().width - WIDTH) / 2,
       (kit.getScreenSize().height - HEIGHT) / 2
     );
-
+    imageBox.add(Box.createHorizontalGlue());
+    drawImage();
+    imageBox.add(Box.createHorizontalGlue());
+    imageBox.setBorder(BorderFactory.createLineBorder(Color.GREEN));
     hboxFormulaType.add(Box.createHorizontalGlue());
     addRadioButton("Формула 1", 1);
     addRadioButton("Формула 2", 2);
@@ -166,6 +180,7 @@ public class App extends JFrame {
     // Связать области воедино в компоновке BoxLayout
     Box contentBox = Box.createVerticalBox();
     contentBox.add(Box.createVerticalGlue());
+    contentBox.add(imageBox);
     contentBox.add(hboxFormulaType);
     contentBox.add(hboxVariables);
     contentBox.add(hboxResult);
@@ -175,7 +190,7 @@ public class App extends JFrame {
   }
 
   // Главный метод класса
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception{
     App frame = new App();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setVisible(true);
