@@ -133,23 +133,21 @@ public class MainFrame extends JFrame {
 
         Box hboxVariables = Box.createHorizontalBox();
         hboxVariables.setBorder(BorderFactory.createLineBorder(Color.RED));
-        hboxVariables.add(Box.createHorizontalGlue());
         hboxVariables.add(labelForX);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldX);
-        hboxVariables.add(Box.createHorizontalStrut(100));
+        hboxVariables.add(Box.createGlue());
         hboxVariables.add(labelForY);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldY);
-        hboxVariables.add(Box.createHorizontalStrut(100));
+        hboxVariables.add(Box.createGlue());
         hboxVariables.add(labelForZ);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldZ);
-        hboxVariables.add(Box.createHorizontalGlue());
 
         // Создать область для вывода результата
         JLabel labelForResult = new JLabel("Результат:");
-        textFieldResult = new JTextField("0", 10);
+        textFieldResult = new JTextField("0", 20);
         textFieldResult.setMaximumSize(
                 textFieldResult.getPreferredSize());
         Box hboxResult = Box.createHorizontalBox();
@@ -165,11 +163,8 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent ev) {
                 try {
                     Double x = Double.parseDouble(textFieldX.getText());
-                    mem1 = x;
                     Double y = Double.parseDouble(textFieldY.getText());
-                    mem2 = y;
                     Double z = Double.parseDouble(textFieldZ.getText());
-                    mem3 = z;
                     Double result;
                     if (formulaId == 1)
                         result = calculate1(x, y, z);
@@ -191,7 +186,6 @@ public class MainFrame extends JFrame {
                 textFieldY.setText("0");
                 textFieldZ.setText("0");
                 textFieldResult.setText("0");
-                mem1 = mem2 = mem3 = 0;
                 updateMemPanel();
             }
         });
@@ -219,7 +213,7 @@ public class MainFrame extends JFrame {
         addRadButtonForVariable("Переменная 1", 1);
         addRadButtonForVariable("Переменная 2", 2);
         addRadButtonForVariable("Переменная 3", 3);
-        variableRadioButtons.setSelected(radioButtons.getElements().nextElement().getModel(), true);
+        variableRadioButtons.setSelected(variableRadioButtons.getElements().nextElement().getModel(), true);
         hboxVariable.add(Box.createHorizontalGlue());
         hboxVariable.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 
@@ -250,16 +244,13 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 switch (variableId) {
                     case 1 -> {
-                        textFieldResult.setText(Double.toString(Double.parseDouble(textFieldResult.getText()) + Double.parseDouble(textFieldX.getText())));
-                        mem1 = Double.parseDouble(textFieldResult.getText());
+                        mem1 = Double.parseDouble(textFieldResult.getText()) + mem1;
                     }
                     case 2 -> {
-                        textFieldResult.setText(Double.toString(Double.parseDouble(textFieldResult.getText()) + Double.parseDouble(textFieldY.getText())));
-                        mem2 = Double.parseDouble(textFieldResult.getText());
+                        mem2 = Double.parseDouble(textFieldResult.getText()) + mem2;
                     }
                     case 3 -> {
-                        textFieldResult.setText(Double.toString(Double.parseDouble(textFieldResult.getText()) + Double.parseDouble(textFieldZ.getText())));
-                        mem3 = Double.parseDouble(textFieldResult.getText());
+                        mem3 = Double.parseDouble(textFieldResult.getText()) + mem3;
                     }
                 }
                 updateMemPanel();
@@ -274,13 +265,13 @@ public class MainFrame extends JFrame {
         hboxButtonsM.setBorder(BorderFactory.createLineBorder(Color.magenta));
 
         JLabel labelForMem1 = new JLabel("mem1");
-        textFieldMem1 = new JTextField(Double.toString(mem1), 10);
+        textFieldMem1 = new JTextField(Double.toString(mem1), 20);
         textFieldMem1.setMaximumSize(textFieldMem1.getPreferredSize());
         JLabel labelForMem2 = new JLabel("mem2");
-        textFieldMem2 = new JTextField(Double.toString(mem2), 10);
+        textFieldMem2 = new JTextField(Double.toString(mem2), 20);
         textFieldMem2.setMaximumSize(textFieldMem2.getPreferredSize());
         JLabel labelForMem3 = new JLabel("mem1");
-        textFieldMem3 = new JTextField(Double.toString(mem2), 10);
+        textFieldMem3 = new JTextField(Double.toString(mem2), 20);
         textFieldMem3.setMaximumSize(textFieldMem2.getPreferredSize());
 
         memPanel.add(textFieldMem1);
